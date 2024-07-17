@@ -26,6 +26,6 @@ jobs:
 
       - name: Deploy files
         run: |
-          rsync -avz --delete ${{ vars.WEB_LANDING_LOCAL_PATH }} ${{ secrets.WEB_LANDING_USERNAME }}@${{ secrets.WEB_LANDING_HOST }}:${{ vars.WEB_LANDING_FTP_PATH }}
+          rsync -avz --delete ${{ vars.WEB_LANDING_LOCAL_PATH }} ${{ secrets.WEB_LANDING_USERNAME }}@${{ vars.WEB_LANDING_HOST }}:${{ vars.WEB_LANDING_FTP_PATH }}
         env:
           SSH_PRIVATE_KEY: ${{ secrets.WEB_LANDING_KEY }}
