@@ -17,15 +17,22 @@ jobs:
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ secrets.WEB_LANDING_KEY }}
+          ssh-private-key: ${{ secrets.FTP_KEY }}
 
       - name: Add SSH key to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ vars.WEB_LANDING_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ vars.FTP_HOST }} >> ~/.ssh/known_hosts
+
+      - name: check destination path
+        run: |
+          if [[ ${{ vars.FTP_DEST_PATH }} != *"lionk"* ]]; then
+            echo "Error: Destination path must contain 'lionk' in it, don't break ftp again!"
+            exit 1
+          fi
 
       - name: Deploy files
         run: |
-          rsync -avz --delete ${{ vars.WEB_LANDING_LOCAL_PATH }} ${{ secrets.WEB_LANDING_USERNAME }}@${{ vars.WEB_LANDING_HOST }}:${{ vars.WEB_LANDING_FTP_PATH }}
+          rsync -avz --delete ${{ vars.WEB_LOCAL_PATH }} ${{ secrets.FTP_USER }}@${{ vars.FTP_HOST }}:${{ vars.FTP_DEST_PATH }}
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.WEB_LANDING_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.FTP_KEY }}
